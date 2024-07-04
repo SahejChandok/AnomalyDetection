@@ -1,29 +1,34 @@
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
-class RealTimePlot:
-    def __init__(self):
-        self.fig, self.ax = plt.subplots()
-        self.x_data, self.y_data = [], []
-        self.line, = self.ax.plot([], [], 'b-')
-        self.anomaly_dots, = self.ax.plot([], [], 'ro')
+def visualize_data_stream(data_stream_generator, anomaly_detector, total_points):
+    plt.ion()
+    fig, ax = plt.subplots()
+    x_data = []
+    y_data = []
+    anomaly_data = []
 
-    def init_plot(self):
-        self.ax.set_xlim(0, 100)
-        self.ax.set_ylim(-2, 2)
-        return self.line, self.anomaly_dots
+    for i, data_window in enumerate(data_stream_generator):
+        if len(x_data) >= total_points:
+            break
 
-    def update_plot(self, new_data):
-        x, y, is_anomaly = new_data
-        self.x_data.append(x)
-        self.y_data.append(y)
-        
-        if is_anomaly:
-            self.anomaly_dots.set_data(self.x_data[-1:], self.y_data[-1:])
+        x_data.extend(range(len(x_data), len(x_data) + len(data_window)))
+        y_data.extend(data_window)
 
-        self.line.set_data(self.x_data, self.y_data)
-        return self.line, self.anomaly_dots
+        for j, value in enumerate(data_window):
+            is_anomaly, anomaly_value = anomaly_detector.detect_anomaly(value)
+            if is_anomaly:
+                anomaly_data.append((len(x_data) - len(data_window) + j, anomaly_value))
 
-    def animate(self, data_generator):
-        animation = FuncAnimation(self.fig, self.update_plot, data_generator, init_func=self.init_plot, blit=True)
-        plt.show()
+        ax.clear()
+        ax.plot(x_data, y_data, label='Data Stream')
+        if anomaly_data:
+            ax.scatter(*zip(*anomaly_data), color='r', label='Anomalies')
+        ax.legend()
+        ax.set_title('Real-time Data Stream Anomaly Detection')
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Value')
+        plt.pause(0.01)  
+
+    plt.ioff()
+    plt.show()
+

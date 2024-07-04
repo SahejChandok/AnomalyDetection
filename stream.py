@@ -1,13 +1,10 @@
 import numpy as np
 
-def generate_data_stream(period=100, noise_level=0.1):
-    t = 0
+def generate_data_stream(window_size):
     while True:
-        # Regular pattern: sine wave
-        value = np.sin(2 * np.pi * t / period)
-        # Adding seasonal variation
-        value += 0.1 * np.sin(2 * np.pi * t / (period * 10))
-        # Adding noise
-        value += noise_level * np.random.randn()
-        yield value
-        t += 1
+        regular_pattern = np.sin(np.linspace(0, 2 * np.pi, window_size)) * 10
+        seasonal_variation = np.sin(np.linspace(0, 8 * np.pi, window_size)) * 5
+        noise = np.random.normal(0, 1, window_size)
+        data_stream = regular_pattern + seasonal_variation + noise
+        data_stream[window_size // 2] += 150  # Injecting an anomaly
+        yield data_stream  

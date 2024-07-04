@@ -16,3 +16,8 @@ An anomaly is detected if the current data point deviates from the EMA by more t
 - **Handling Seasonal Variations:** By incorporating both seasonal patterns and noise in the data stream generation, the EMA can smooth out these regular fluctuations, while the EMSD helps in detecting true anomalies.
 - **Real-time Processing:** The algorithm is computationally efficient, making it suitable for real-time applications where quick detection and response are essential.
 
+### Steps to run the program
+- **Navigate to the Directory:** cd ANOMALYDETECTION
+- **Install dependencies** pip install -r requirements.txt
+- **Run the program** python main.py
+

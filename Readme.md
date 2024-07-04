@@ -17,7 +17,7 @@ An anomaly is detected if the current data point deviates from the EMA by more t
 - **Real-time Processing:** The algorithm is computationally efficient, making it suitable for real-time applications where quick detection and response are essential.
 
 ### Steps to run the program
-- **Navigate to the Directory:** cd ANOMALYDETECTION
-- **Install dependencies** pip install -r requirements.txt
-- **Run the program** python main.py
+- **Navigate to the Directory:** >cd ANOMALYDETECTION
+- **Install dependencies** >pip install -r requirements.txt
+- **Run the program** >python main.py
 
